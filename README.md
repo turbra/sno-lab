@@ -64,7 +64,7 @@ spec:
 `oc adm policy add-cluster-role-to-user cluster-admin <USER>`
 
 ### Add users to the IDP
-##### Extract the file data from the secret
+#### Extract the file data from the secret
 `oc extract secret/localusers -n openshift-config --to /home/user/ --confirm`
 
 #### Add an entry to the htpasswd file for the additional user
