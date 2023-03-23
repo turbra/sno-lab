@@ -1,9 +1,9 @@
 # sno-lab
 ## [Single Node OpenShift](https://docs.openshift.com/container-platform/4.12///installing/installing_sno/install-sno-preparing-to-install-sno.html) - Home lab
 
-### Deploy nfs external provisioner using the [nfs-subdir-external-provisioner](https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner)
-
-### Create local user and grant cluster admin privileges
+## This will cover the following:
+- How to deploy nfs external provisioner using the [nfs-subdir-external-provisioner](https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner)
+- How to create local user and grant cluster admin privileges
 
 #### Create new project
 `oc new-project nfs-auto`
