@@ -1,5 +1,5 @@
 # sno-lab
-## Single Node OpenShift - Home lab
+## [Single Node OpenShift](https://docs.openshift.com/container-platform/4.12///installing/installing_sno/install-sno-preparing-to-install-sno.html) - Home lab
 
 ### Deploy nfs external provisioner using the [nfs-subdir-external-provisioner](https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner)
 
