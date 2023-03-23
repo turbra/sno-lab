@@ -26,3 +26,52 @@ oc adm policy add-scc-to-user hostmount-anyuid system:serviceaccount:$NAMESPACE:
 
 #### Define default storage class
 `oc patch storageclass nfs-client -p '{"metadata": {"annotations": {"storageclass.kubernetes.io/is-default-class": "true"}}}'`
+
+
+# Creating an HTPasswd Identity Provider
+
+#### Create the htpasswd file
+`touch htpasswd`
+
+#### Use the htpasswd command to add users and passwords to the file we just created
+```bash
+htpasswd -Bb user1 password
+htpasswd -Bb user2 password2
+```
+
+#### Create a secret in the `openshift-config` project
+`oc create secret generic htpasswd --from-file=htpasswd -n openshift-config`
+
+#### Export the existing OAUTH resource to a file, for us to modify
+`oc get oauth cluster -o yaml > auth-provider.yaml`
+
+#### Edit the auth-provider.yaml with our new identity provider
+```yaml
+apiVersion: config.openshift.io/v1
+kind: OAuth
+...output omitted...
+spec:
+  identityProviders:
+  - htpasswd:
+      fileData:
+        name: localusers
+    mappingMethod: claim
+    name: htpasswd
+    type: HTPasswd
+```
+
+#### Apply the custom resource defined in the previous step
+`oc replace -f auth-provider.yaml`
+
+#### Assign cluster-admin role to a user
+`oc adm policy add-cluster-role-to-user cluster-admin <USER>`
+
+#### Add users to the IDP
+##### Extract the file data from the secret
+`oc extract secret/localusers -n openshift-config --to /home/user/ --confirm`
+
+#### Add an entry to the htpasswd file for the additional user
+`htpasswd -b /home/user/htpasswd user99 password`
+
+#### Update the secret after adding additional users
+`oc set data secret/localusers --from-file htpasswd=/home/user/htpasswd -n openshift-config`
